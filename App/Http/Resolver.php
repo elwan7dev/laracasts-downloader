@@ -151,9 +151,13 @@ class Resolver
 
             $links = $this->getVimeoLinks($episode['vimeo_id']);
 
-            $downloadLink = $links[VIDEO_QUALITY] ?? current($links);
-
-            return $this->downloadVideo($downloadLink, $saveTo);
+            if (isset($links[VIDEO_QUALITY])){
+                $downloadLink = $links[VIDEO_QUALITY];
+                return $this->downloadVideo($downloadLink, $saveTo);
+            }else{
+                Utils::write('There is not 1080p QUALITY');
+                return false;
+            }
         } catch (RequestException $e) {
             Utils::write(sprintf($e->getMessage()));
 
